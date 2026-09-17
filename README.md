@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StudyFlow AI
 
-## Getting Started
+A responsive landing page for a fictional AI study companion. The site pairs a polished product story with a browser-only tutor preview, a sample dashboard, pricing, testimonials, and an accessible FAQ.
 
-First, run the development server:
+This is a **frontend concept project**. There is no backend, account creation, payment flow, document upload, or AI API. Demo responses are scripted locally; metrics, testimonials, dashboard data, and prices are illustrative.
+
+## Stack
+
+- Next.js 16 App Router and React 19
+- TypeScript
+- Tailwind CSS 4 with project design tokens
+- Motion for restrained entrance animations
+- Lucide React icons
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-## Learn More
+The production build uses Next.js's webpack option so it can build without Turbopack's local worker port requirement in restricted environments.
 
-To learn more about Next.js, take a look at the following resources:
+## Project map
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `app/page.tsx`: landing page composition
+- `components/layout/`: navigation and footer
+- `components/sections/`: page sections and product previews
+- `components/ui/`: reusable brand, buttons, headings, and reveal animation
+- `data/site.ts`: typed sample product content
+- `docs/studyflow-landing-page.md`: product definition, wireframes, design system, behavior, and implementation plan
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The interactive demo accepts suggested or custom questions, shows a loading and typing state, offers follow-up prompts, and can be reset. Unknown topics receive a transparent preview limitation message.
