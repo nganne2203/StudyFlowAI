@@ -3,33 +3,21 @@
 import { FormEvent, useEffect, useState } from "react";
 import { ArrowRight, Check, CircleHelp, CornerDownLeft, RotateCcw, Sparkles, WandSparkles } from "lucide-react";
 import { useReducedMotion } from "motion/react";
-import { demoPrompts } from "@/data/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import type { Locale, SiteCopy } from "@/data/i18n";
 
-function getAnswer(prompt: string): string {
+function getAnswer(prompt: string, copy: SiteCopy["demo"]): string {
   const value = prompt.toLowerCase();
-  if (value.includes("photosynthesis")) {
-    return "Photosynthesis is how plants make food. They use sunlight to turn water and carbon dioxide into sugar for energy, and release oxygen along the way. Think of a leaf as a tiny solar-powered kitchen.";
-  }
-  if (value.includes("quiz")) {
-    return "Let's try active recall. Question 1: What does a React effect let a component do after it renders? A) Change its props  B) Synchronize with something outside React  C) Skip rendering. Pick an answer, then explain why you chose it.";
-  }
-  if (value.includes("plan") || value.includes("schedule")) {
-    return "Here's a gentle three-day plan: Day 1, review the core idea for 25 minutes. Day 2, make five practice questions and answer them without notes. Day 3, revisit anything you missed and teach the topic back in your own words.";
-  }
-  if (value.includes("summar") || value.includes("notes")) {
-    return "Here's the short version: 1) Start with the main idea. 2) Keep only the facts that support it. 3) Add one example in your own words. In a full product, you could bring your notes here; this demo uses a sample response.";
-  }
-  if (value.includes("simpler")) {
-    return "Imagine you finish setting up your desk, then remember a task you need to do. React renders the screen first; useEffect handles that extra task afterward. It's often used for things like fetching data or connecting to another system.";
-  }
-  if (value.includes("example") || value.includes("useeffect") || value.includes("react")) {
-    return "useEffect tells React to do something after a component appears or updates. For example, a course page can load your saved notes after it renders. Think: show the page first, then do the extra task.";
-  }
-  return "This interactive preview has a small set of sample answers, so I can't explain every topic yet. Try one of the suggested prompts, or ask about React useEffect or photosynthesis to see how a clear, step-by-step answer could work.";
+  if (value.includes("photosynthesis") || value.includes("quang hợp")) return copy.answers.photosynthesis;
+  if (value.includes("quiz") || value.includes("kiểm tra") || value.includes("đố")) return copy.answers.quiz;
+  if (value.includes("plan") || value.includes("schedule") || value.includes("kế hoạch")) return copy.answers.plan;
+  if (value.includes("summar") || value.includes("notes") || value.includes("tóm tắt") || value.includes("ghi chú")) return copy.answers.summary;
+  if (value.includes("simpler") || value.includes("đơn giản hơn")) return copy.answers.simpler;
+  if (value.includes("example") || value.includes("ví dụ") || value.includes("useeffect") || value.includes("react")) return copy.answers.react;
+  return copy.answers.fallback;
 }
 
-export function AIDemo() {
+export function AIDemo({ locale, copy }: { locale: Locale; copy: SiteCopy["demo"] }) {
   const [input, setInput] = useState("");
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
@@ -39,7 +27,7 @@ export function AIDemo() {
 
   useEffect(() => {
     if (requestId === 0) return;
-    const answer = getAnswer(prompt);
+    const answer = getAnswer(prompt, copy);
     let interval: number | undefined;
     const delay = window.setTimeout(() => {
       if (reduceMotion) {
@@ -62,7 +50,7 @@ export function AIDemo() {
       window.clearTimeout(delay);
       if (interval) window.clearInterval(interval);
     };
-  }, [requestId, prompt, reduceMotion]);
+  }, [requestId, prompt, reduceMotion, copy]);
 
   function submit(nextPrompt: string) {
     const clean = nextPrompt.trim();
@@ -92,44 +80,42 @@ export function AIDemo() {
       <div className="container demo-grid">
         <div className="demo-copy">
           <SectionHeading
-            eyebrow="Interactive preview"
-            title={<>Go ahead. Ask <em>the question.</em></>}
-            description="Try a sample prompt and see how StudyFlow helps you get from a question to a clearer next step."
+            eyebrow={copy.eyebrow}
+            title={<>{copy.title1} <em>{copy.title2}</em></>}
+            description={copy.description}
           />
           <div className="demo-suggestions">
-            <span>NEED A STARTING POINT?</span>
+            <span>{copy.suggestion}</span>
             <div>
-              {demoPrompts.map((item) => <button key={item} type="button" onClick={() => submit(item)} disabled={status === "loading" || status === "typing"}>{item}<ArrowRight size={15} aria-hidden="true" /></button>)}
+              {copy.prompts.map((item) => <button key={item} type="button" onClick={() => submit(item)} disabled={status === "loading" || status === "typing"}>{item}<ArrowRight size={15} aria-hidden="true" /></button>)}
             </div>
           </div>
-          <div className="demo-disclaimer"><Check size={15} aria-hidden="true" /> Sample responses run locally. No AI service or account required.</div>
+          <div className="demo-disclaimer"><Check size={15} aria-hidden="true" /> {copy.disclaimer}</div>
         </div>
         <div className="demo-window">
           <div className="demo-window-top">
-            <div><span className="demo-mark"><Sparkles size={17} /></span><strong>StudyFlow AI</strong><span className="demo-window-label">Tutor</span></div>
-            <span className="demo-live"><i /> Preview mode</span>
+            <div><span className="demo-mark"><Sparkles size={17} /></span><strong>StudyFlow AI</strong><span className="demo-window-label">{copy.tutor}</span></div>
+            <span className="demo-live"><i /> {copy.preview}</span>
           </div>
           <div className="demo-conversation">
             {status === "idle" ? (
               <div className="demo-empty">
                 <span className="demo-empty-icon"><WandSparkles size={27} strokeWidth={1.7} /></span>
-                <h3>What would you like to learn today?</h3>
-                <p>No question is too small. Start with a topic above or ask your own.</p>
-                <div className="demo-empty-guide"><CircleHelp size={16} /><span>Try “Explain React useEffect simply”</span></div>
+                <h3>{copy.emptyTitle}</h3>
+                <p>{copy.emptyText}</p>
+                <div className="demo-empty-guide"><CircleHelp size={16} /><span>{copy.emptyGuide}</span></div>
               </div>
             ) : (
               <div className="demo-messages">
-                <div className="demo-user"><span>You</span><p>{prompt}</p></div>
+                <div className="demo-user"><span>{copy.you}</span><p>{prompt}</p></div>
                 <div className="demo-ai">
                   <span className="demo-ai-avatar"><Sparkles size={16} /></span>
                   <div>
                     <span className="demo-ai-name">StudyFlow AI</span>
-                    {status === "loading" ? <div className="typing-indicator" aria-label="StudyFlow is thinking"><i /><i /><i /></div> : <p>{response}{status === "typing" && <span className="typing-cursor" aria-hidden="true" />}</p>}
+                    {status === "loading" ? <div className="typing-indicator" aria-label={copy.thinking}><i /><i /><i /></div> : <p>{response}{status === "typing" && <span className="typing-cursor" aria-hidden="true" />}</p>}
                     {status === "ready" && (
                       <div className="demo-followups">
-                        <button type="button" onClick={() => submit("Give me an example of React useEffect")}>Give an example</button>
-                        <button type="button" onClick={() => submit("Quiz me on this topic")}>Quiz me</button>
-                        <button type="button" onClick={() => submit("Explain it even simpler")}>Explain simpler</button>
+                        {copy.followups.map((label, index) => <button type="button" key={label} onClick={() => submit(copy.followupPrompts[index])}>{label}</button>)}
                       </div>
                     )}
                   </div>
@@ -138,17 +124,17 @@ export function AIDemo() {
             )}
           </div>
           <span className="sr-only" role="status">
-            {status === "loading" ? "StudyFlow is thinking." : status === "ready" ? response : ""}
+            {status === "loading" ? copy.thinking + "." : status === "ready" ? response : ""}
           </span>
           <div className="demo-bottom">
-            {status !== "idle" && <button className="demo-reset" type="button" onClick={reset}><RotateCcw size={14} /> Reset conversation</button>}
+            {status !== "idle" && <button className="demo-reset" type="button" onClick={reset}><RotateCcw size={14} /> {copy.reset}</button>}
             <form className="demo-form" onSubmit={handleSubmit}>
-              <label className="sr-only" htmlFor="demo-question">Ask StudyFlow a question</label>
-              <input id="demo-question" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask StudyFlow anything..." disabled={status === "loading" || status === "typing"} />
+              <label className="sr-only" htmlFor="demo-question">{copy.ask}</label>
+              <input id="demo-question" lang={locale} value={input} onChange={(event) => setInput(event.target.value)} placeholder={copy.placeholder} disabled={status === "loading" || status === "typing"} />
               <span className="input-enter" aria-hidden="true"><CornerDownLeft size={15} /></span>
-              <button type="submit" aria-label="Send question" disabled={!input.trim() || status === "loading" || status === "typing"}><ArrowRight size={19} /></button>
+              <button type="submit" aria-label={copy.send} disabled={!input.trim() || status === "loading" || status === "typing"}><ArrowRight size={19} /></button>
             </form>
-            <small>StudyFlow can make mistakes. Check important information with your course material.</small>
+            <small>{copy.caution}</small>
           </div>
         </div>
       </div>

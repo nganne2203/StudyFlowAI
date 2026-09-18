@@ -1,18 +1,19 @@
 import { BookOpen, Code2, GraduationCap, FlaskConical, PenLine } from "lucide-react";
+import type { SiteCopy } from "@/data/i18n";
 
-export function SocialProof() {
+export function SocialProof({ copy }: { copy: SiteCopy["social"] }) {
   return (
-    <section className="social-proof" aria-label="Example study topics">
+    <section className="social-proof" aria-label={copy.aria}>
       <div className="container social-inner">
-        <div className="social-label">Made for all the ways<br />you learn</div>
+        <div className="social-label">{copy.lead1}<br />{copy.lead2}</div>
         <div className="subject-list">
-          <span><Code2 size={18} /> Coding</span>
-          <span><FlaskConical size={18} /> Science</span>
-          <span><BookOpen size={18} /> Humanities</span>
-          <span><PenLine size={18} /> Exam prep</span>
-          <span><GraduationCap size={18} /> And beyond</span>
+          <span><Code2 size={18} /> {copy.subjects[0]}</span>
+          <span><FlaskConical size={18} /> {copy.subjects[1]}</span>
+          <span><BookOpen size={18} /> {copy.subjects[2]}</span>
+          <span><PenLine size={18} /> {copy.subjects[3]}</span>
+          <span><GraduationCap size={18} /> {copy.subjects[4]}</span>
         </div>
-        <small>Concept project · sample experience</small>
+        <small>{copy.foot}</small>
       </div>
     </section>
   );

@@ -1,33 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Brand } from "@/components/ui/Brand";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import type { Locale, SiteCopy } from "@/data/i18n";
 
-const links = [
-  { label: "Features", href: "#features" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Live demo", href: "#demo" },
-  { label: "Pricing", href: "#pricing" },
-];
+const hrefs = ["#features", "#how-it-works", "#demo", "#pricing"];
 
-export function Navbar() {
+export function Navbar({ locale, copy }: { locale: Locale; copy: SiteCopy["nav"] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const links = copy.links.map((label, index) => ({ label, href: hrefs[index] }));
 
   return (
     <header className="site-header">
-      <nav className="container nav-inner" aria-label="Main navigation">
-        <Brand />
+      <nav className="container nav-inner" aria-label={copy.aria}>
+        <Brand locale={locale} />
         <div className="nav-links">
           {links.map((link) => <a href={link.href} key={link.href}>{link.label}</a>)}
         </div>
         <div className="nav-actions">
-          <ButtonLink href="#demo" className="nav-cta" arrow>Start learning</ButtonLink>
+          <div className="language-switch" aria-label={copy.language}>
+            <Link href="/" hrefLang="en" lang="en" aria-current={locale === "en" ? "page" : undefined}>EN</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/vi" hrefLang="vi" lang="vi" aria-current={locale === "vi" ? "page" : undefined}>VI</Link>
+          </div>
+          <ButtonLink href="#demo" className="nav-cta" arrow>{copy.cta}</ButtonLink>
           <button
             className="menu-toggle"
             type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? copy.close : copy.open}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen((open) => !open)}

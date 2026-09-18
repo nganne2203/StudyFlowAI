@@ -1,28 +1,25 @@
 import { ArrowUpRight, Layers3, Lightbulb, ListTodo } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import type { SiteCopy } from "@/data/i18n";
 
-const problems = [
-  { icon: Layers3, title: "Too much to sort through", text: "Find the point in your notes without losing the context." },
-  { icon: Lightbulb, title: "Still not quite clicking", text: "Ask the follow-up question and get a fresh explanation." },
-  { icon: ListTodo, title: "No clear next step", text: "Turn a big goal into a study session you can start today." },
-];
+const icons = [Layers3, Lightbulb, ListTodo];
 
-export function Problem() {
+export function Problem({ copy }: { copy: SiteCopy["problem"] }) {
   return (
     <section className="section problem-section" id="why-studyflow">
       <div className="container problem-grid">
         <Reveal>
           <SectionHeading
-            eyebrow="The problem"
-            title={<>Studying shouldn&apos;t feel like <em>starting over.</em></>}
-            description="You have the notes. You have the questions. What you need is a way to connect the dots and keep moving."
+            eyebrow={copy.eyebrow}
+            title={<>{copy.title1} <em>{copy.title2}</em></>}
+            description={copy.description}
           />
-          <a className="text-link" href="#features">See what StudyFlow can do <ArrowUpRight size={18} aria-hidden="true" /></a>
+          <a className="text-link" href="#features">{copy.link} <ArrowUpRight size={18} aria-hidden="true" /></a>
         </Reveal>
         <div className="problem-list">
-          {problems.map((item, index) => {
-            const Icon = item.icon;
+          {copy.items.map((item, index) => {
+            const Icon = icons[index];
             return (
               <Reveal className="problem-row" key={item.title} delay={index * 0.07}>
                 <span className="problem-icon"><Icon size={21} strokeWidth={1.8} /></span>

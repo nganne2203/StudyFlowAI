@@ -2,20 +2,20 @@
 
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
-import { faqs } from "@/data/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import type { SiteCopy } from "@/data/i18n";
 
-export function FAQ() {
+export function FAQ({ copy }: { copy: SiteCopy["faq"] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   return (
     <section className="section faq-section" id="faq">
       <div className="container faq-grid">
         <div className="faq-intro">
-          <SectionHeading eyebrow="Good to know" title={<>A few good <em>questions.</em></>} description="Here are the details behind the idea. Still curious? Try the interactive preview above." />
-          <a className="text-link" href="#demo">Explore the demo →</a>
+          <SectionHeading eyebrow={copy.eyebrow} title={<>{copy.title1} <em>{copy.title2}</em></>} description={copy.description} />
+          <a className="text-link" href="#demo">{copy.link}</a>
         </div>
         <div className="faq-list">
-          {faqs.map((item, index) => {
+          {copy.items.map((item, index) => {
             const open = openIndex === index;
             return (
               <div className={"faq-item" + (open ? " open" : "")} key={item.question}>

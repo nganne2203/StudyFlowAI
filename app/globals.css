@@ -60,6 +60,13 @@ svg { flex: none; }
 .nav-links a { color: #4b5267; font-size: 13px; font-weight: 650; transition: color .2s; }
 .nav-links a:hover { color: var(--primary); }
 .nav-actions { display: flex; align-items: center; gap: 8px; }
+.language-switch { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: #a0a4b3; font-size: 11px; font-weight: 800; line-height: 1; }
+.language-switch a { padding: 4px 2px; color: #7b8193; border-radius: 4px; }
+.language-switch a:hover, .language-switch a[aria-current="page"] { color: var(--primary); }
+.language-switch a:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+html[lang="vi"] .hero h1 { letter-spacing: -.025em; }
+html[lang="vi"] .section-heading h2,
+html[lang="vi"] .final-cta-card h2 { letter-spacing: -.015em; }
 .nav-cta { min-height: 41px; padding-inline: 17px; border-radius: 9px; font-size: 12px; }
 .menu-toggle { display: none; width: 42px; height: 42px; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: white; }
 .mobile-nav { display: none; }
@@ -418,8 +425,10 @@ svg { flex: none; }
 @media (max-width: 850px) {
   .container { width: min(100% - 40px, 1200px); }
   .section { padding-block: 84px; }
-  .nav-links { gap: 15px; margin-left: 0; }
-  .nav-links a { font-size: 11px; }
+  .nav-links { display: none; }
+  .menu-toggle { display: flex; }
+  .mobile-nav.is-open { display: flex; flex-direction: column; gap: 0; padding: 5px 18px 17px; border-top: 1px solid #e8eaf1; background: #fff; box-shadow: 0 18px 28px #25284b12; }
+  .mobile-nav a { padding: 12px 7px; border-bottom: 1px solid #f0f1f5; color: #4c5369; font-size: 13px; font-weight: 700; }
   .hero { padding: 72px 0 88px; }
   .hero-grid { grid-template-columns: 1fr; gap: 28px; }
   .hero h1 { font-size: clamp(48px, 8vw, 69px); }
@@ -516,9 +525,12 @@ svg { flex: none; }
   .footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 }
 
+@media (max-width: 480px) {
+  .nav-cta { display: none; }
+}
+
 @media (max-width: 390px) {
   .container { width: min(100% - 30px, 1200px); }
-  .nav-cta { padding-inline: 9px; }
   .hero h1 { font-size: 41px; }
   .hero-actions { display: grid; }
   .hero-actions .button-link { width: 100%; }

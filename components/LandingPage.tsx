@@ -12,28 +12,30 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Pricing } from "@/components/sections/Pricing";
 import { FAQ } from "@/components/sections/FAQ";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { translations, type Locale } from "@/data/i18n";
 
-export default function Home() {
+export function LandingPage({ locale }: { locale: Locale }) {
+  const copy = translations[locale];
   return (
     <>
-      <a className="skip-link" href="#main">Skip to content</a>
+      <a className="skip-link" href="#main">{copy.skip}</a>
       <div id="top" />
-      <Navbar />
+      <Navbar locale={locale} copy={copy.nav} />
       <main id="main">
-        <Hero />
-        <SocialProof />
-        <Problem />
-        <Features />
-        <AIDemo />
-        <HowItWorks />
-        <DashboardPreview />
-        <Statistics />
-        <Testimonials />
-        <Pricing />
-        <FAQ />
-        <FinalCTA />
+        <Hero copy={copy.hero} />
+        <SocialProof copy={copy.social} />
+        <Problem copy={copy.problem} />
+        <Features copy={copy.features} />
+        <AIDemo locale={locale} copy={copy.demo} />
+        <HowItWorks copy={copy.how} />
+        <DashboardPreview copy={copy.dashboard} />
+        <Statistics copy={copy.stats} />
+        <Testimonials copy={copy.testimonials} />
+        <Pricing copy={copy.pricing} />
+        <FAQ copy={copy.faq} />
+        <FinalCTA copy={copy.final} />
       </main>
-      <Footer />
+      <Footer copy={copy.footer} />
     </>
   );
 }
